@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - 8000:8000
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    command: sh -c "uvicorn main:app --host 0.0.0.0 --reload"
+    depends_on:
+      - postgresql
+    env_file:
+      - ./.env
+
+  postgresql:
+    image: postgres
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - 5433:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
